@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy New Year 2026 - 3D Celebration</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%);
+      color: #ffffff;
+      perspective: 1000px;
+    }
+
+    .app-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .firework-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .firework {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      animation: launch 2s ease-out forwards;
+    }
+
+    @keyframes launch {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-400px) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .burst-particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      animation: burst 1s ease-out forwards;
+    }
+
+    @keyframes burst {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .hero-section {
+      position: relative;
+      height: 100%;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      z-index: 3;
+    }
+
+    .title-3d {
+      font-size: 72px;
+      font-weight: bold;
+      text-align: center;
+      background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+      transform-style: preserve-3d;
+      animation: float3d 3s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes float3d {
+      0%, 100% {
+        transform: translateY(0) rotateX(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotateX(5deg);
+      }
+    }
+
+    .subtitle {
+      font-size: 24px;
+      color: #a8daff;
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .content-section {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      z-index: 3;
+    }
+
+    .fortune-box {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      text-align: center;
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease;
+    }
+
+    .fortune-box:hover {
+      transform: translateZ(20px);
+    }
+
+    .fortune-btn {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      color: #1a1a3e;
+      border: none;
+      padding: 15px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+
+    .fortune-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+    }
+
+    .fortune-text {
+      font-size: 22px;
+      color: #ffd700;
+      margin-top: 20px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.6;
+    }
+
+    .games-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .game-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      border: 2px solid rgba(168, 218, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: rgba(255, 215, 0, 0.5);
+    }
+
+    .game-title {
+      font-size: 24px;
+      color: #ffd700;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .memory-card {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #4a5568, #2d3748);
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .memory-card:hover {
+      transform: scale(1.05);
+    }
+
+    .memory-card.flipped {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      transform: rotateY(180deg);
+    }
+
+    .memory-card.matched {
+      background: linear-gradient(135deg, #10b981, #34d399);
+      pointer-events: none;
+    }
+
+    .countdown-section {
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 215, 0, 0.1);
+      border-radius: 20px;
+      margin-bottom: 40px;
+    }
+
+    .countdown-title {
+      font-size: 28px;
+      color: #ffd700;
+      margin-bottom: 20px;
+    }
+
+    .countdown-display {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .countdown-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      min-width: 80px;
+    }
+
+    .countdown-number {
+      font-size: 36px;
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    .countdown-label {
+      font-size: 14px;
+      color: #a8daff;
+      margin-top: 5px;
+    }
+
+    .number-guess {
+      text-align: center;
+    }
+
+    .guess-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .guess-btn {
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .guess-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+    }
+
+    .guess-feedback {
+      margin-top: 15px;
+      font-size: 18px;
+      min-height: 30px;
+      color: #ffd700;
+    }
+
+    @media (max-width: 768px) {
+      .title-3d {
+        font-size: 48px;
+      }
+
+      .subtitle {
+        font-size: 18px;
+      }
+
+      .memory-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .countdown-display {
+        gap: 10px;
+      }
+
+      .countdown-item {
+        min-width: 60px;
+        padding: 15px;
+      }
+
+      .countdown-number {
+        font-size: 24px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="app">
+   <div class="stars" id="stars"></div>
+   <div class="firework-container" id="fireworks"></div>
+   <div class="hero-section">
+    <h1 class="title-3d" id="mainTitle">Happy New Year 2026</h1>
+    <p class="subtitle" id="welcomeMessage">Welcome to an Amazing Year Ahead!</p>
+     <p class="subtitle" id="welcomeMessage">Best wishes from SHANKAR </p>	
+   </div>
+   <div class="content-section">
+    <div class="countdown-section">
+     <h2 class="countdown-title">Time Until 2027</h2>
+     <div class="countdown-display" id="countdown"></div>
+    </div>
+    <div class="fortune-box">
+     <h2 class="game-title">🔮 Your 2026 Fortune</h2><button class="fortune-btn" id="fortuneBtn">Get Your 2026 Fortune</button>
+     <div class="fortune-text" id="fortuneText">
+      Click the button to reveal your destiny!
+     </div>
+    </div>
+    <div class="games-container">
+     <div class="game-card">
+      <h3 class="game-title" id="memoryGameTitle">🎮 Memory Challenge</h3>
+      <p style="text-align: center; margin-bottom: 15px;">Match the pairs!</p>
+      <div class="memory-grid" id="memoryGrid"></div>
+     </div>
+     <div class="game-card">
+      <h3 class="game-title">🎯 Guess the Number</h3>
+      <div class="number-guess">
+       <p>I'm thinking of a number between 1-100!</p><input type="number" class="guess-input" id="guessInput" placeholder="Enter your guess" min="1" max="100"> <button class="guess-btn" id="guessBtn">Make a Guess</button>
+       <div class="guess-feedback" id="guessFeedback"></div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "Happy New Year 2026",
+      welcome_message: "Welcome to an Amazing Year Ahead!",
+      fortune_button_text: "Get Your 2026 Fortune",
+      memory_game_title: "🎮 Memory Challenge",
+      background_color: "#0a0e27",
+      title_color: "#ffd700",
+      accent_color: "#a8daff",
+      card_color: "#1a1a3e",
+      font_family: "Arial",
+      font_size: 16
+    };
+
+    const fortunes = [
+      "🌟 2026 will bring you unexpected adventures and delightful surprises!",
+      "💫 Your creativity will skyrocket this year - prepare for amazing ideas!",
+      "🎯 Success is chasing you in 2026, but don't trip while running away!",
+      "🌈 You'll find joy in the smallest moments - like finding matching socks!",
+      "⭐ This year you'll master a new skill... probably watching shows faster!",
+      "🎨 Your artistic talents will bloom - stick figures count too!",
+      "🚀 Big opportunities ahead - just remember to check the expiration date!",
+      "💎 Fortune favors you, but so does pizza delivery - what a year!",
+      "🌺 Love and laughter will fill your days (and maybe some cat videos too)!",
+      "🎪 You'll be the star of every gathering - your jokes are finally landing!",
+      "🌸 Peace and prosperity await - after you finish that Netflix series!",
+      "🎭 Drama will avoid you this year... mostly. Okay, maybe a little drama.",
+      "🏆 Victory is yours in 2026 - in video games, board games, all the games!",
+      "🌙 Wisdom will guide you - or Google, probably Google.",
+      "🎁 Gifts will come your way - free samples count as gifts, right?",
+      "🌊 Go with the flow in 2026 - unless it's Monday morning traffic!",
+      "🍀 Lucky breaks are coming - and some unlucky trips, watch that step!",
+      "🎵 Music will lift your spirits - even your questionable shower singing!",
+      "🦋 Transformation awaits you - new haircut? Bold move!",
+      "✨ Magic happens when you least expect it - like finding money in old jeans!",
+      "🌻 Your positive energy will attract good things and possibly some mosquitoes!",
+      "🎊 Party invitations galore - your couch might get jealous though!",
+      "🏃 You'll run towards your dreams - after one more episode, promise!",
+      "🎨 Colors will brighten your world - that neon shirt was a bold choice!",
+      "🌟 Stars align for you - but planets might be slightly off, check later!",
+      "🎯 Your aim is true this year - except in throwing crumpled paper in bins!",
+      "🌞 Sunny days ahead - and some cloudy ones for balance, life's fair!",
+      "🎈 Joy multiplies around you - along with laundry, but focus on joy!",
+      "🦄 Unicorns approve of your 2026 plans - they're very picky!",
+      "🎆 Your year will be explosive - in a good way, like fireworks not drama!"
+    ];
+
+    const memoryEmojis = ['🎉', '🎊', '🎁', '🎈', '⭐', '💫', '🌟', '✨'];
+    let memoryCards = [...memoryEmojis, ...memoryEmojis].sort(() => Math.random() - 0.5);
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let guessCount = 0;
+
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.width = Math.random() * 3 + 1 + 'px';
+        star.style.height = star.style.width;
+        star.style.animationDelay = Math.random() * 3 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+
+    function launchFirework() {
+      const container = document.getElementById('fireworks');
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffd700', '#ff1493'];
+      
+      const firework = document.createElement('div');
+      firework.className = 'firework';
+      firework.style.left = Math.random() * 100 + '%';
+      firework.style.bottom = '0';
+      firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      container.appendChild(firework);
+
+      setTimeout(() => {
+        createBurst(firework.offsetLeft, container.offsetHeight - 400, firework.style.backgroundColor);
+        firework.remove();
+      }, 1000);
+    }
+
+    function createBurst(x, y, color) {
+      const container = document.getElementById('fireworks');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'burst-particle';
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.backgroundColor = color;
+        
+        const angle = (Math.PI * 2 * i) / 30;
+        const velocity = 50 + Math.random() * 50;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity;
+        
+        particle.style.setProperty('--tx', tx + 'px');
+        particle.style.setProperty('--ty', ty + 'px');
+        
+        container.appendChild(particle);
+        
+        setTimeout(() => particle.remove(), 1000);
+      }
+    }
+
+    function initMemoryGame() {
+      const grid = document.getElementById('memoryGrid');
+      grid.innerHTML = '';
+      memoryCards.forEach((emoji, index) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.emoji = emoji;
+        card.dataset.index = index;
+        card.addEventListener('click', flipCard);
+        grid.appendChild(card);
+      });
+    }
+
+    function flipCard(e) {
+      const card = e.currentTarget;
+      if (card.classList.contains('flipped') || card.classList.contains('matched') || flippedCards.length === 2) {
+        return;
+      }
+
+      card.classList.add('flipped');
+      card.textContent = card.dataset.emoji;
+      flippedCards.push(card);
+
+      if (flippedCards.length === 2) {
+        setTimeout(checkMatch, 500);
+      }
+    }
+
+    function checkMatch() {
+      const [card1, card2] = flippedCards;
+      if (card1.dataset.emoji === card2.dataset.emoji) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        matchedPairs++;
+        if (matchedPairs === memoryEmojis.length) {
+          setTimeout(() => {
+            launchFirework();
+            launchFirework();
+            launchFirework();
+            setTimeout(resetMemoryGame, 2000);
+          }, 500);
+        }
+      } else {
+        card1.classList.remove('flipped');
+        card2.classList.remove('flipped');
+        card1.textContent = '';
+        card2.textContent = '';
+      }
+      flippedCards = [];
+    }
+
+    function resetMemoryGame() {
+      matchedPairs = 0;
+      memoryCards = [...memoryEmojis, ...memoryEmojis].sort(() => Math.random() - 0.5);
+      initMemoryGame();
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const nextYear = new Date('2027-01-01T00:00:00');
+      const diff = nextYear - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      const countdown = document.getElementById('countdown');
+      countdown.innerHTML = `
+        <div class="countdown-item">
+          <div class="countdown-number">${days}</div>
+          <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-number">${hours}</div>
+          <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-number">${minutes}</div>
+          <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-number">${seconds}</div>
+          <div class="countdown-label">Seconds</div>
+        </div>
+      `;
+    }
+
+    async function onConfigChange(config) {
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Arial, sans-serif';
+      const baseSize = config.font_size || defaultConfig.font_size;
+
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      document.body.style.fontSize = `${baseSize}px`;
+      document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, #1a1a3e 50%, #2d1b4e 100%)`;
+
+      const mainTitle = document.getElementById('mainTitle');
+      mainTitle.textContent = config.main_title || defaultConfig.main_title;
+      mainTitle.style.fontSize = `${baseSize * 4.5}px`;
+      mainTitle.style.background = `linear-gradient(45deg, ${config.title_color || defaultConfig.title_color}, #ffed4e, ${config.title_color || defaultConfig.title_color})`;
+      mainTitle.style.webkitBackgroundClip = 'text';
+      mainTitle.style.webkitTextFillColor = 'transparent';
+      mainTitle.style.backgroundClip = 'text';
+
+      const welcomeMessage = document.getElementById('welcomeMessage');
+      welcomeMessage.textContent = config.welcome_message || defaultConfig.welcome_message;
+      welcomeMessage.style.fontSize = `${baseSize * 1.5}px`;
+      welcomeMessage.style.color = config.accent_color || defaultConfig.accent_color;
+
+      const fortuneBtn = document.getElementById('fortuneBtn');
+      fortuneBtn.textContent = config.fortune_button_text || defaultConfig.fortune_button_text;
+      fortuneBtn.style.fontSize = `${baseSize * 1.125}px`;
+
+      const memoryGameTitle = document.getElementById('memoryGameTitle');
+      memoryGameTitle.textContent = config.memory_game_title || defaultConfig.memory_game_title;
+      memoryGameTitle.style.fontSize = `${baseSize * 1.5}px`;
+      memoryGameTitle.style.color = config.title_color || defaultConfig.title_color;
+
+      const gameTitles = document.querySelectorAll('.game-title');
+      gameTitles.forEach(title => {
+        title.style.color = config.title_color || defaultConfig.title_color;
+      });
+
+      const gameCards = document.querySelectorAll('.game-card');
+      gameCards.forEach(card => {
+        card.style.borderColor = `rgba(168, 218, 255, 0.3)`;
+      });
+
+      const countdownTitle = document.querySelector('.countdown-title');
+      countdownTitle.style.color = config.title_color || defaultConfig.title_color;
+
+      const fortuneText = document.getElementById('fortuneText');
+      fortuneText.style.color = config.title_color || defaultConfig.title_color;
+    }
+
+    document.getElementById('fortuneBtn').addEventListener('click', () => {
+      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      document.getElementById('fortuneText').textContent = fortune;
+      launchFirework();
+      launchFirework();
+    });
+
+    document.getElementById('guessBtn').addEventListener('click', () => {
+      const guess = parseInt(document.getElementById('guessInput').value);
+      const feedback = document.getElementById('guessFeedback');
+      
+      if (isNaN(guess) || guess < 1 || guess > 100) {
+        feedback.textContent = '🤔 Please enter a number between 1 and 100!';
+        return;
+      }
+
+      guessCount++;
+      
+      if (guess === secretNumber) {
+        feedback.textContent = `🎉 Amazing! You got it in ${guessCount} tries!`;
+        feedback.style.color = '#10b981';
+        launchFirework();
+        launchFirework();
+        launchFirework();
+        setTimeout(() => {
+          secretNumber = Math.floor(Math.random() * 100) + 1;
+          guessCount = 0;
+          document.getElementById('guessInput').value = '';
+          feedback.textContent = '';
+          feedback.style.color = '#ffd700';
+        }, 3000);
+      } else if (guess < secretNumber) {
+        feedback.textContent = '📈 Too low! Try a higher number!';
+      } else {
+        feedback.textContent = '📉 Too high! Try a lower number!';
+      }
+    });
+
+    createStars();
+    initMemoryGame();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    setInterval(launchFirework, 3000);
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.title_color || defaultConfig.title_color,
+              set: (value) => {
+                config.title_color = value;
+                window.elementSdk.setConfig({ title_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["welcome_message", config.welcome_message || defaultConfig.welcome_message],
+          ["fortune_button_text", config.fortune_button_text || defaultConfig.fortune_button_text],
+          ["memory_game_title", config.memory_game_title || defaultConfig.memory_game_title]
+        ])
+      });
+    }
+
+    onConfigChange(defaultConfig);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b6b23f9800e6eef',t:'MTc2NzE5ODQwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
